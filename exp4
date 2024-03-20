@@ -1,0 +1,187 @@
+mysql> CREATE TABLE Jobs (
+    ->   job_id INT PRIMARY KEY,
+    ->   job_title VARCHAR(255) NOT NULL,
+    ->   min_salary DECIMAL(10,2),
+    ->   max_salary DECIMAL(10,2)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+
+mysql> CREATE TABLE Regions (
+    ->   region_id INT PRIMARY KEY,
+    ->   region_name VARCHAR(255) NOT NULL
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+
+mysql> CREATE TABLE Countries (
+    ->   country_id INT PRIMARY KEY,
+    ->   country_name VARCHAR(255) NOT NULL,
+    ->   region_id INT,
+    ->   FOREIGN KEY (region_id) REFERENCES Regions(region_id)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> CREATE TABLE Locations (
+    ->   location_id INT PRIMARY KEY,
+    ->   street_address VARCHAR(255) NOT NULL,
+    ->   postal_code VARCHAR(255) NOT NULL,
+    ->   city VARCHAR(255) NOT NULL,
+    ->   state_province VARCHAR(255) NOT NULL,
+    ->   country_id INT,
+    ->   FOREIGN KEY (country_id) REFERENCES Countries(country_id)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> CREATE TABLE Departments (
+    ->   department_id INT PRIMARY KEY,
+    ->   department_name VARCHAR(255) NOT NULL,
+    ->   location_id INT,
+    ->   FOREIGN KEY (location_id) REFERENCES Locations(location_id)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> CREATE TABLE Employees (
+    ->   employee_id INT PRIMARY KEY,
+    ->   first_name VARCHAR(255) NOT NULL,
+    ->   last_name VARCHAR(255) NOT NULL,
+    ->   email VARCHAR(255) NOT NULL,
+    ->   phone_number VARCHAR(255) NOT NULL,
+    ->   hire_date DATE NOT NULL,
+    ->   job_id INT,
+    ->   salary DECIMAL(10,2),
+    ->   manager_id INT,
+    ->   department_id INT,
+    ->   FOREIGN KEY (job_id) REFERENCES Jobs(job_id),
+    ->   FOREIGN KEY (department_id) REFERENCES Departments(department_id)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> CREATE TABLE Dependents (
+    ->   dependent_id INT PRIMARY KEY,
+    ->   first_name VARCHAR(255) NOT NULL,
+    ->   last_name VARCHAR(255) NOT NULL,
+    ->   relationship VARCHAR(255) NOT NULL,
+    ->   employee_id INT,
+    ->   FOREIGN KEY (employee_id) REFERENCES Employees(employee_id)
+    -> );
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> show tables;
++------------------------+
+| Tables_in_organization |
++------------------------+
+| Countries              |
+| Departments            |
+| Dependents             |
+| Employees              |
+| Jobs                   |
+| Locations              |
+| Regions                |
+| department             |
+| employee               |
+| orders                 |
+| persons                |
++------------------------+
+11 rows in set (0.00 sec)
+
+mysql> INSERT INTO Jobs(job_id,job_title,min_salary,max_salary) VALUES (1,'Accountant',4200,9000);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO Jobs(job_id,job_title,min_salary,max_salary) VALUES(2,'Manager',8200,16000);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO Jobs(job_id,job_title,min_salary,max_salary) VALUES(2,'computer assistant',3000,6000);
+ERROR 1062 (23000): Duplicate entry '2' for key 'Jobs.PRIMARY'
+mysql> INSERT INTO Jobs(job_id,job_title,min_salary,max_salary) VALUES(3,'computer assistant',3000,6000);
+Query OK, 1 row affected (0.00 sec)
+mysql>  INSERT INTO Jobs(job_id,job_title,min_salary,max_salary) VALUES(4,'developer',15000,30000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql>  INSERT INTO Jobs(job_id,job_title,min_salary,max_salary) VALUES(5,'vice
+manager',9000,17000);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> desc Jobs;
++------------+---------------+------+-----+---------+-------+
+| Field      | Type          | Null | Key | Default | Extra |
++------------+---------------+------+-----+---------+-------+
+| job_id     | int           | NO   | PRI | NULL    |       |
+| job_title  | varchar(255)  | NO   |     | NULL    |       |
+| min_salary | decimal(10,2) | YES  |     | NULL    |       |
+| max_salary | decimal(10,2) | YES  |     | NULL    |       |
++------------+---------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select * from Jobs;
++--------+--------------------+------------+------------+
+| job_id | job_title          | min_salary | max_salary |
++--------+--------------------+------------+------------+
+|      1 | Accountant         |    4200.00 |    9000.00 |
+|      2 | Manager            |    8200.00 |   16000.00 |
+|      3 | computer assistant |    3000.00 |    6000.00 |
+|      4 | developer          |   15000.00 |   30000.00 |
+|      5 | vice manager       |    9000.00 |   17000.00 |
++--------+--------------------+------------+------------+
+5 rows in set (0.00 sec)
+
+mysql> INSERT INTO Regions(region_id,region_name) VALUES (1,'Europe');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO Regions(region_id,region_name) VALUES (2,'Americas');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> INSERT INTO Regions(region_id,region_name) VALUES (3,'Asia');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO Regions(region_id,region_name) VALUES (4,'Middle east and africa');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from Regions;
++-----------+------------------------+
+| region_id | region_name            |
++-----------+------------------------+
+|         1 | Europe                 |
+|         2 | Americas               |
+|         3 | Asia                   |
+|         4 | Middle east and africa |
++-----------+------------------------+
+4 rows in set (0.01 sec)
+
+mysql> INSERT INTO Countries(country_id,country_name,region_id) VALUES('AR','Argentina',2);
+mysql> 366 (HY000): Incorrect integer value: 'AR' for column 'country_id' at row 1
+mysql> wqd;.kljlkdwqjuntries(country_id,country_name,region_id) VALUES('AR','Argentina',2);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'wqd' at line 1
+    -> INSERT INTO Countries(country_id,country_name,region_id) VALUES('AR','Argentina',2);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '.kljlkdwqj
+INSERT INTO Countries(country_id,country_name,region_id) VALUES('AR',' at line 1
+mysql> INSERT INTO Countries(country_id,country_name,region_id) VALUES('AR','Argentina',2);
+ERROR 1366 (HY000): Incorrect integer value: 'AR' for column 'country_id' at row 1
+mysql> INSERT INTO Countries(country_id,country_name,region_id) VALUES('A1','Argentina',2);
+ERROR 1366 (HY000): Incorrect integer value: 'A1' for column 'country_id' at row 1
+mysql> INSERT INTO Countries(country_id,country_name,region_id) VALUES('1','Argentina',2);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> INSERT INTO Countries(country_id,country_name,region_id) VALUES('2','Australia',3);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO Countries(country_id,country_name,region_id) VALUES('3','belgium',1);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO Countries(country_id,country_name,region_id) VALUES('4','nigeria',4);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from Countries;
++------------+--------------+-----------+
+| country_id | country_name | region_id |
++------------+--------------+-----------+
+|          1 | Argentina    |         2 |
+|          2 | Australia    |         3 |
+|          3 | belgium      |         1 |
+|          4 | nigeria      |         4 |
++------------+--------------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> 
+
+
