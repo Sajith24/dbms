@@ -1,2 +1,0 @@
-insert into employee(emp_no,emp_name,designation,dept_no,salary)values(1,'john','manager','D01',50000),(2,'jane','assistant manager','D02',45000),(3,'alice','engineer','D03',30000),(1,'john','manager','D01',50000),
-
